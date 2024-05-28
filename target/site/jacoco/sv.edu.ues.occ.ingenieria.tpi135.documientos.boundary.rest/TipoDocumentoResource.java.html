@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoDocumentoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest</a> &gt; <span class="el_source">TipoDocumentoResource.java</span></div><h1>TipoDocumentoResource.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.control.TipoDocumentoBean;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.TipoDocumento;
+
+/**
+ *
+ * @author alexo
+ */
+@Path(&quot;tipodocumento&quot;)
+<span class="nc" id="L32">public class TipoDocumentoResource implements Serializable {</span>
+
+    @Inject
+    TipoDocumentoBean tdBean;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createTipoDocumento(TipoDocumento nuevo) {
+<span class="nc bnc" id="L41" title="All 4 branches missed.">        if (nuevo == null || nuevo.getIdTipoDocumento() != null) {</span>
+            // Payload nulo o incorrecto
+<span class="nc" id="L43">            return Response.status(RestResourceHeaderPattern.STATUS_PARAMETRO_EQUIVOCADO)</span>
+<span class="nc" id="L44">                    .header(RestResourceHeaderPattern.DETALLE_PARAMETRO_EQUIVOCADO, &quot;Payload nulo o incorrecto&quot;)</span>
+<span class="nc" id="L45">                    .build();</span>
+        }
+
+        // Realizar otras validaciones necesarias
+        // Crear el tipo de documento
+<span class="nc" id="L50">        tdBean.create(nuevo);</span>
+
+        // Retornar la respuesta exitosa con el código 201 y la ubicación del nuevo recurso creado
+<span class="nc" id="L53">        return Response.status(Response.Status.CREATED)</span>
+<span class="nc" id="L54">                .header(&quot;Location&quot;, &quot;tipodocumento/&quot; + nuevo.getIdTipoDocumento())</span>
+<span class="nc" id="L55">                .build();</span>
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public List&lt;TipoDocumento&gt; findRange(
+            @QueryParam(value = &quot;first&quot;)
+            @DefaultValue(value = &quot;0&quot;) int first,
+            @QueryParam(value = &quot;pagesize&quot;)
+            @DefaultValue(value = &quot;50&quot;) int pageSize
+    ) {
+<span class="nc bnc" id="L66" title="All 4 branches missed.">        if (first &gt;= 0 &amp;&amp; pageSize &gt; 0) {</span>
+<span class="nc" id="L67">            return tdBean.findRange(first, pageSize);</span>
+        }
+<span class="nc" id="L69">        return Collections.EMPTY_LIST;</span>
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(&quot;/{id}&quot;)
+    public Response findById(@PathParam(&quot;id&quot;) final Integer idTipoDocumento) {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (idTipoDocumento != null) {</span>
+<span class="nc" id="L77">            TipoDocumento found = tdBean.findById(idTipoDocumento);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (found != null) {</span>
+<span class="nc" id="L79">                return Response.status(Response.Status.OK)</span>
+<span class="nc" id="L80">                        .entity(found)</span>
+<span class="nc" id="L81">                        .build();</span>
+            }
+<span class="nc" id="L83">            return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L84">                    .header(&quot;not-found&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L85">                    .build();</span>
+        }
+<span class="nc" id="L87">        return Response.status(422)</span>
+<span class="nc" id="L88">                .header(&quot;missing-parameter&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L89">                .build();</span>
+        
+    }
+    
+    
+    
+    @DELETE
+    @Path(&quot;/{id}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response delete(@PathParam(&quot;id&quot;) Integer idTipoDocumento) {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (idTipoDocumento != null) {</span>
+<span class="nc" id="L100">            TipoDocumento registro = tdBean.findById(idTipoDocumento);</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (registro != null) {</span>
+                try {
+<span class="nc" id="L104">                    tdBean.delete(registro);</span>
+<span class="nc" id="L105">                    return Response.status(Response.Status.NO_CONTENT).build();</span>
+<span class="nc" id="L106">                } catch (Exception ex) {</span>
+<span class="nc" id="L107">                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L108">                    return Response.status(500).header(&quot;delete-exception&quot;, registro.toString()).build();</span>
+                }
+            } else {
+<span class="nc" id="L111">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L112">                        .header(&quot;not-found&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L113">                        .build();</span>
+            }
+        }
+
+<span class="nc" id="L117">        return Response.status(422)</span>
+<span class="nc" id="L118">                .header(&quot;missing-parameter&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L119">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

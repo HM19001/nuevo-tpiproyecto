@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Documento.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.entity</a> &gt; <span class="el_source">Documento.java</span></div><h1>Documento.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.entity;
+
+import jakarta.json.bind.annotation.JsonbTransient;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+/**
+ *
+ * @author alexo
+ */
+@Entity
+@Table(name = &quot;documento&quot;, catalog = &quot;documentostpi135&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;Documento.findAll&quot;, query = &quot;SELECT d FROM Documento d&quot;),
+    @NamedQuery(name = &quot;Documento.findByIdDocumento&quot;, query = &quot;SELECT d FROM Documento d WHERE d.idDocumento = :idDocumento&quot;),
+    @NamedQuery(name = &quot;Documento.findByNombre&quot;, query = &quot;SELECT d FROM Documento d WHERE d.nombre = :nombre&quot;),
+    @NamedQuery(name = &quot;Documento.findByReferenciaExterna&quot;, query = &quot;SELECT d FROM Documento d WHERE d.referenciaExterna = :referenciaExterna&quot;),
+    @NamedQuery(name = &quot;Documento.findByUbicacionFisica&quot;, query = &quot;SELECT d FROM Documento d WHERE d.ubicacionFisica = :ubicacionFisica&quot;),
+    @NamedQuery(name = &quot;Documento.findByUrl&quot;, query = &quot;SELECT d FROM Documento d WHERE d.url = :url&quot;),
+    @NamedQuery(name = &quot;Documento.findByFechaCreacion&quot;, query = &quot;SELECT d FROM Documento d WHERE d.fechaCreacion = :fechaCreacion&quot;),
+    @NamedQuery(name = &quot;Documento.findByCreadoPor&quot;, query = &quot;SELECT d FROM Documento d WHERE d.creadoPor = :creadoPor&quot;),
+    @NamedQuery(name = &quot;Documento.findByComentarios&quot;, query = &quot;SELECT d FROM Documento d WHERE d.comentarios = :comentarios&quot;)})
+public class Documento implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = &quot;id_documento&quot;, nullable = false)
+    private Long idDocumento;
+    @Column(name = &quot;nombre&quot;, length = 2147483647)
+    private String nombre;
+    @Column(name = &quot;referencia_externa&quot;, length = 2147483647)
+    private String referenciaExterna;
+    @Column(name = &quot;ubicacion_fisica&quot;, length = 2147483647)
+    private String ubicacionFisica;
+    @Column(name = &quot;url&quot;, length = 2147483647)
+    private String url;
+    @Column(name = &quot;fecha_creacion&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    @Column(name = &quot;creado_por&quot;, length = 155)
+    private String creadoPor;
+    @Column(name = &quot;comentarios&quot;, length = 2147483647)
+    private String comentarios;
+    @OneToMany(mappedBy = &quot;idDocumento&quot;)
+    private List&lt;Metadato&gt; metadatoList;
+    @OneToMany(mappedBy = &quot;idDocumento&quot;)
+    private List&lt;Taxonomia&gt; taxonomiaList;
+
+<span class="nc" id="L68">    public Documento() {</span>
+<span class="nc" id="L69">    }</span>
+
+<span class="nc" id="L71">    public Documento(Long idDocumento) {</span>
+<span class="nc" id="L72">        this.idDocumento = idDocumento;</span>
+<span class="nc" id="L73">    }</span>
+
+    public Long getIdDocumento() {
+<span class="nc" id="L76">        return idDocumento;</span>
+    }
+
+    public void setIdDocumento(Long idDocumento) {
+<span class="nc" id="L80">        this.idDocumento = idDocumento;</span>
+<span class="nc" id="L81">    }</span>
+
+    public String getNombre() {
+<span class="nc" id="L84">        return nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+<span class="nc" id="L88">        this.nombre = nombre;</span>
+<span class="nc" id="L89">    }</span>
+
+    public String getReferenciaExterna() {
+<span class="nc" id="L92">        return referenciaExterna;</span>
+    }
+
+    public void setReferenciaExterna(String referenciaExterna) {
+<span class="nc" id="L96">        this.referenciaExterna = referenciaExterna;</span>
+<span class="nc" id="L97">    }</span>
+
+    public String getUbicacionFisica() {
+<span class="nc" id="L100">        return ubicacionFisica;</span>
+    }
+
+    public void setUbicacionFisica(String ubicacionFisica) {
+<span class="nc" id="L104">        this.ubicacionFisica = ubicacionFisica;</span>
+<span class="nc" id="L105">    }</span>
+
+    public String getUrl() {
+<span class="nc" id="L108">        return url;</span>
+    }
+
+    public void setUrl(String url) {
+<span class="nc" id="L112">        this.url = url;</span>
+<span class="nc" id="L113">    }</span>
+
+    public Date getFechaCreacion() {
+<span class="nc" id="L116">        return fechaCreacion;</span>
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+<span class="nc" id="L120">        this.fechaCreacion = fechaCreacion;</span>
+<span class="nc" id="L121">    }</span>
+
+    public String getCreadoPor() {
+<span class="nc" id="L124">        return creadoPor;</span>
+    }
+
+    public void setCreadoPor(String creadoPor) {
+<span class="nc" id="L128">        this.creadoPor = creadoPor;</span>
+<span class="nc" id="L129">    }</span>
+
+    public String getComentarios() {
+<span class="nc" id="L132">        return comentarios;</span>
+    }
+
+    public void setComentarios(String comentarios) {
+<span class="nc" id="L136">        this.comentarios = comentarios;</span>
+<span class="nc" id="L137">    }</span>
+@JsonbTransient
+    public List&lt;Metadato&gt; getMetadatoList() {
+<span class="nc" id="L140">        return metadatoList;</span>
+    }
+
+    public void setMetadatoList(List&lt;Metadato&gt; metadatoList) {
+<span class="nc" id="L144">        this.metadatoList = metadatoList;</span>
+<span class="nc" id="L145">    }</span>
+@JsonbTransient
+    public List&lt;Taxonomia&gt; getTaxonomiaList() {
+<span class="nc" id="L148">        return taxonomiaList;</span>
+    }
+
+    public void setTaxonomiaList(List&lt;Taxonomia&gt; taxonomiaList) {
+<span class="nc" id="L152">        this.taxonomiaList = taxonomiaList;</span>
+<span class="nc" id="L153">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L157">        int hash = 0;</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        hash += (idDocumento != null ? idDocumento.hashCode() : 0);</span>
+<span class="nc" id="L159">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (!(object instanceof Documento)) {</span>
+<span class="nc" id="L166">            return false;</span>
+        }
+<span class="nc" id="L168">        Documento other = (Documento) object;</span>
+<span class="nc bnc" id="L169" title="All 8 branches missed.">        if ((this.idDocumento == null &amp;&amp; other.idDocumento != null) || (this.idDocumento != null &amp;&amp; !this.idDocumento.equals(other.idDocumento))) {</span>
+<span class="nc" id="L170">            return false;</span>
+        }
+<span class="nc" id="L172">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L177">        return &quot;sv.edu.ues.occ.ingenieria.tpi135.mapeodocumentos.entity.Documento[ idDocumento=&quot; + idDocumento + &quot; ]&quot;;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

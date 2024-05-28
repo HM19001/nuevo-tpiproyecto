@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetadatoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest</a> &gt; <span class="el_source">MetadatoResource.java</span></div><h1>MetadatoResource.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.Collections;
+import java.util.List;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.control.AtributoBean;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.control.MetadatoBean;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.control.TipoDocumentoBean;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.Atributo;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.Metadato;
+
+/**
+ *
+ * @author alexo
+ */
+@Path(&quot;documento/{idDocumento}/metadato&quot;)
+<span class="nc" id="L31">public class MetadatoResource {</span>
+
+    @Inject
+    MetadatoBean mBean;
+
+    @Inject
+    TipoDocumentoBean tdBean;
+
+    @Inject
+    AtributoBean aBean;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createMetadato(@PathParam(&quot;idDocumento&quot;) Long idDocumento, Metadato metadato) {
+        // Validación de payload nulo o campos incompletos
+<span class="nc bnc" id="L47" title="All 6 branches missed.">        if (metadato == null || metadato.getIdAtributo() == null || metadato.getValor() == null) {</span>
+<span class="nc" id="L48">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L49">                    .entity(&quot;El payload está incompleto o nulo.&quot;)</span>
+<span class="nc" id="L50">                    .header(RestResourceHeaderPattern.DETALLE_PARAMETRO_EQUIVOCADO, &quot;Payload incompleto o nulo&quot;)</span>
+<span class="nc" id="L51">                    .build();</span>
+        }
+
+        // Validar la existencia del atributo
+<span class="nc" id="L55">        Atributo atributo = metadato.getIdAtributo();</span>
+<span class="nc bnc" id="L56" title="All 4 branches missed.">        if (atributo == null || atributo.getIdAtributo() == null) {</span>
+<span class="nc" id="L57">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L58">                    .entity(&quot;El atributo no puede ser nulo.&quot;)</span>
+<span class="nc" id="L59">                    .header(RestResourceHeaderPattern.DETALLE_PARAMETRO_EQUIVOCADO, &quot;Atributo nulo&quot;)</span>
+<span class="nc" id="L60">                    .build();</span>
+        }
+
+//        Validar la existencia del tipo de documento asociado al atributo
+//        TipoDocumento tipoDocumento = atributo.getIdTipoDocumento();
+//        if (tipoDocumento == null || !tipoDocumento.getIdTipoDocumento().equals(idDocumento)) {
+//            return Response.status(Response.Status.METHOD_NOT_ALLOWED)
+//                    .entity(&quot;El tipo de documento asociado al atributo no es válido.&quot;)
+//                    .header(RestResourceHeaderPattern.DETALLE_PARAMETRO_EQUIVOCADO, &quot;Tipo de documento inválido&quot;)
+//                    .build();
+//        }
+        try {
+<span class="nc" id="L72">            mBean.create(metadato);</span>
+<span class="nc" id="L73">            return Response.status(Response.Status.CREATED)</span>
+<span class="nc" id="L74">                    .entity(metadato)</span>
+<span class="nc" id="L75">                    .header(&quot;Location&quot;, &quot;documento/&quot; + idDocumento + &quot;/metadato/&quot; + metadato.getIdMetadata())</span>
+<span class="nc" id="L76">                    .build();</span>
+<span class="nc" id="L77">        } catch (Exception e) {</span>
+<span class="nc" id="L78">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L79">                    .entity(&quot;Error al crear el metadato.&quot;)</span>
+<span class="nc" id="L80">                    .build();</span>
+        }
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public List&lt;Metadato&gt; findRange(
+            @QueryParam(value = &quot;first&quot;)
+            @DefaultValue(value = &quot;0&quot;) int first,
+            @QueryParam(value = &quot;pagesize&quot;)
+            @DefaultValue(value = &quot;50&quot;) int pageSize
+    ) {
+<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (first &gt;= 0 &amp;&amp; pageSize &gt; 0) {</span>
+<span class="nc" id="L93">            return mBean.findRange(first, pageSize);</span>
+        }
+<span class="nc" id="L95">        return Collections.EMPTY_LIST;</span>
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(&quot;/{id}&quot;)
+    public Response findById(@PathParam(&quot;id&quot;) final Long idMetadata) {
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (idMetadata != null) {</span>
+<span class="nc" id="L103">            Metadato found = mBean.findById(idMetadata);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if (found != null) {</span>
+<span class="nc" id="L105">                return Response.status(Response.Status.OK)</span>
+<span class="nc" id="L106">                        .entity(found)</span>
+<span class="nc" id="L107">                        .build();</span>
+            }
+<span class="nc" id="L109">            return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L110">                    .header(&quot;not-found&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L111">                    .build();</span>
+        }
+<span class="nc" id="L113">        return Response.status(422)</span>
+<span class="nc" id="L114">                .header(&quot;missing-parameter&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L115">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

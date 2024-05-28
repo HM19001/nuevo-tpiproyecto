@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Metadato.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.entity</a> &gt; <span class="el_source">Metadato.java</span></div><h1>Metadato.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+/**
+ *
+ * @author alexo
+ */
+@Entity
+@Table(name = &quot;metadato&quot;, catalog = &quot;documentostpi135&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;Metadato.findAll&quot;, query = &quot;SELECT m FROM Metadato m&quot;),
+    @NamedQuery(name = &quot;Metadato.findByIdMetadata&quot;, query = &quot;SELECT m FROM Metadato m WHERE m.idMetadata = :idMetadata&quot;),
+    @NamedQuery(name = &quot;Metadato.findByValor&quot;, query = &quot;SELECT m FROM Metadato m WHERE m.valor = :valor&quot;),
+    @NamedQuery(name = &quot;Metadato.findByFechaCreacion&quot;, query = &quot;SELECT m FROM Metadato m WHERE m.fechaCreacion = :fechaCreacion&quot;),
+    @NamedQuery(name = &quot;Metadato.findByComentarios&quot;, query = &quot;SELECT m FROM Metadato m WHERE m.comentarios = :comentarios&quot;)})
+public class Metadato implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = &quot;id_metadata&quot;, nullable = false)
+    private Long idMetadata;
+    @Column(name = &quot;valor&quot;, length = 2147483647)
+    private String valor;
+    @Column(name = &quot;fecha_creacion&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    @Column(name = &quot;comentarios&quot;, length = 2147483647)
+    private String comentarios;
+    @JoinColumn(name = &quot;id_atributo&quot;, referencedColumnName = &quot;id_atributo&quot;)
+    @ManyToOne
+    private Atributo idAtributo;
+    @JoinColumn(name = &quot;id_documento&quot;, referencedColumnName = &quot;id_documento&quot;)
+    @ManyToOne
+    private Documento idDocumento;
+
+<span class="nc" id="L57">    public Metadato() {</span>
+<span class="nc" id="L58">    }</span>
+
+<span class="nc" id="L60">    public Metadato(Long idMetadata) {</span>
+<span class="nc" id="L61">        this.idMetadata = idMetadata;</span>
+<span class="nc" id="L62">    }</span>
+
+    public Long getIdMetadata() {
+<span class="nc" id="L65">        return idMetadata;</span>
+    }
+
+    public void setIdMetadata(Long idMetadata) {
+<span class="nc" id="L69">        this.idMetadata = idMetadata;</span>
+<span class="nc" id="L70">    }</span>
+
+    public String getValor() {
+<span class="nc" id="L73">        return valor;</span>
+    }
+
+    public void setValor(String valor) {
+<span class="nc" id="L77">        this.valor = valor;</span>
+<span class="nc" id="L78">    }</span>
+
+    public Date getFechaCreacion() {
+<span class="nc" id="L81">        return fechaCreacion;</span>
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+<span class="nc" id="L85">        this.fechaCreacion = fechaCreacion;</span>
+<span class="nc" id="L86">    }</span>
+
+    public String getComentarios() {
+<span class="nc" id="L89">        return comentarios;</span>
+    }
+
+    public void setComentarios(String comentarios) {
+<span class="nc" id="L93">        this.comentarios = comentarios;</span>
+<span class="nc" id="L94">    }</span>
+
+    public Atributo getIdAtributo() {
+<span class="nc" id="L97">        return idAtributo;</span>
+    }
+
+    public void setIdAtributo(Atributo idAtributo) {
+<span class="nc" id="L101">        this.idAtributo = idAtributo;</span>
+<span class="nc" id="L102">    }</span>
+
+    public Documento getIdDocumento() {
+<span class="nc" id="L105">        return idDocumento;</span>
+    }
+
+    public void setIdDocumento(Documento idDocumento) {
+<span class="nc" id="L109">        this.idDocumento = idDocumento;</span>
+<span class="nc" id="L110">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L114">        int hash = 0;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        hash += (idMetadata != null ? idMetadata.hashCode() : 0);</span>
+<span class="nc" id="L116">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (!(object instanceof Metadato)) {</span>
+<span class="nc" id="L123">            return false;</span>
+        }
+<span class="nc" id="L125">        Metadato other = (Metadato) object;</span>
+<span class="nc bnc" id="L126" title="All 8 branches missed.">        if ((this.idMetadata == null &amp;&amp; other.idMetadata != null) || (this.idMetadata != null &amp;&amp; !this.idMetadata.equals(other.idMetadata))) {</span>
+<span class="nc" id="L127">            return false;</span>
+        }
+<span class="nc" id="L129">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L134">        return &quot;sv.edu.ues.occ.ingenieria.tpi135.mapeodocumentos.entity.Metadato[ idMetadata=&quot; + idMetadata + &quot; ]&quot;;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

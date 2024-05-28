@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Taxonomia.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.entity</a> &gt; <span class="el_source">Taxonomia.java</span></div><h1>Taxonomia.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+/**
+ *
+ * @author alexo
+ */
+@Entity
+@Table(name = &quot;taxonomia&quot;, catalog = &quot;documentostpi135&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;Taxonomia.findTipoDocumentoByDocumento&quot;, query = &quot;SELECT t.idTipoDocumento.idTipoDocumento FROM Taxonomia t WHERE t.idDocumento = :idDocumento&quot;),
+    @NamedQuery(name = &quot;Taxonomia.findAll&quot;, query = &quot;SELECT t FROM Taxonomia t&quot;),
+    @NamedQuery(name = &quot;Taxonomia.findByIdTaxonomia&quot;, query = &quot;SELECT t FROM Taxonomia t WHERE t.idTaxonomia = :idTaxonomia&quot;),
+    @NamedQuery(name = &quot;Taxonomia.findByFechaCreacion&quot;, query = &quot;SELECT t FROM Taxonomia t WHERE t.fechaCreacion = :fechaCreacion&quot;)})
+public class Taxonomia implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = &quot;id_taxonomia&quot;, nullable = false)
+    private Long idTaxonomia;
+    @Column(name = &quot;fecha_creacion&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    @JoinColumn(name = &quot;id_documento&quot;, referencedColumnName = &quot;id_documento&quot;)
+    @ManyToOne
+    private Documento idDocumento;
+    @JoinColumn(name = &quot;id_tipo_documento&quot;, referencedColumnName = &quot;id_tipo_documento&quot;)
+    @ManyToOne
+    private TipoDocumento idTipoDocumento;
+
+<span class="nc" id="L52">    public Taxonomia() {</span>
+<span class="nc" id="L53">    }</span>
+
+<span class="nc" id="L55">    public Taxonomia(Long idTaxonomia) {</span>
+<span class="nc" id="L56">        this.idTaxonomia = idTaxonomia;</span>
+<span class="nc" id="L57">    }</span>
+
+    public Long getIdTaxonomia() {
+<span class="nc" id="L60">        return idTaxonomia;</span>
+    }
+
+    public void setIdTaxonomia(Long idTaxonomia) {
+<span class="nc" id="L64">        this.idTaxonomia = idTaxonomia;</span>
+<span class="nc" id="L65">    }</span>
+
+    public Date getFechaCreacion() {
+<span class="nc" id="L68">        return fechaCreacion;</span>
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+<span class="nc" id="L72">        this.fechaCreacion = fechaCreacion;</span>
+<span class="nc" id="L73">    }</span>
+
+    public Documento getIdDocumento() {
+<span class="nc" id="L76">        return idDocumento;</span>
+    }
+
+    public void setIdDocumento(Documento idDocumento) {
+<span class="nc" id="L80">        this.idDocumento = idDocumento;</span>
+<span class="nc" id="L81">    }</span>
+
+    public TipoDocumento getIdTipoDocumento() {
+<span class="nc" id="L84">        return idTipoDocumento;</span>
+    }
+
+    public void setIdTipoDocumento(TipoDocumento idTipoDocumento) {
+<span class="nc" id="L88">        this.idTipoDocumento = idTipoDocumento;</span>
+<span class="nc" id="L89">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L93">        int hash = 0;</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        hash += (idTaxonomia != null ? idTaxonomia.hashCode() : 0);</span>
+<span class="nc" id="L95">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (!(object instanceof Taxonomia)) {</span>
+<span class="nc" id="L102">            return false;</span>
+        }
+<span class="nc" id="L104">        Taxonomia other = (Taxonomia) object;</span>
+<span class="nc bnc" id="L105" title="All 8 branches missed.">        if ((this.idTaxonomia == null &amp;&amp; other.idTaxonomia != null) || (this.idTaxonomia != null &amp;&amp; !this.idTaxonomia.equals(other.idTaxonomia))) {</span>
+<span class="nc" id="L106">            return false;</span>
+        }
+<span class="nc" id="L108">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L113">        return &quot;sv.edu.ues.occ.ingenieria.tpi135.mapeodocumentos.entity.Taxonomia[ idTaxonomia=&quot; + idTaxonomia + &quot; ]&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

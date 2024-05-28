@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+  <persistence-unit name="documientos-PU" transaction-type="JTA">
+    <jta-data-source>jdbc/pgdb</jta-data-source>
+    <class>sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.Atributo</class>
+    <class>sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.Documento</class>
+    <class>sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.Metadato</class>
+    <class>sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.Taxonomia</class>
+    <class>sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.TipoAtributo</class>
+    <class>sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.TipoDocumento</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+    </properties>
+  </persistence-unit>
+</persistence>

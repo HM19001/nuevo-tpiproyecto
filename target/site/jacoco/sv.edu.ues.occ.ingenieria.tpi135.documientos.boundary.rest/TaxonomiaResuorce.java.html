@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaxonomiaResuorce.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest</a> &gt; <span class="el_source">TaxonomiaResuorce.java</span></div><h1>TaxonomiaResuorce.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.control.TaxonomiaBean;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.Taxonomia;
+
+/**
+ *
+ * @author alexo
+ */
+@Path(&quot;documento/{idDocumento}/taxonomia&quot;)
+<span class="nc" id="L29">public class TaxonomiaResuorce implements Serializable {</span>
+
+    @Inject
+    TaxonomiaBean tBean;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createTaxonomia(Taxonomia nuevo) {
+<span class="nc bnc" id="L38" title="All 6 branches missed.">        if (nuevo == null || nuevo.getIdDocumento() == null || nuevo.getIdTipoDocumento() == null) {</span>
+<span class="nc" id="L39">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L40">                    .header(RestResourceHeaderPattern.DETALLE_PARAMETRO_EQUIVOCADO, &quot;Payload nulo o datos incompletos&quot;)</span>
+<span class="nc" id="L41">                    .build();</span>
+        }
+<span class="nc" id="L43">        tBean.create(nuevo);</span>
+<span class="nc" id="L44">        return Response.status(Response.Status.CREATED)</span>
+<span class="nc" id="L45">                .header(&quot;Location&quot;, &quot;taxonomia/&quot; + nuevo.getIdTaxonomia())</span>
+<span class="nc" id="L46">                .build();</span>
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public List&lt;Taxonomia&gt; findRange(
+            @QueryParam(value = &quot;first&quot;)
+            @DefaultValue(value = &quot;0&quot;) int first,
+            @QueryParam(value = &quot;pagesize&quot;)
+            @DefaultValue(value = &quot;50&quot;) int pageSize
+    ) {
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        if (first &gt;= 0 &amp;&amp; pageSize &gt; 0) {</span>
+<span class="nc" id="L58">            return tBean.findRange(first, pageSize);</span>
+        }
+<span class="nc" id="L60">        return Collections.EMPTY_LIST;</span>
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(&quot;/{id}&quot;)
+    public Response findById(@PathParam(&quot;id&quot;) final Long idTaxonomia) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (idTaxonomia != null) {</span>
+<span class="nc" id="L68">            Taxonomia found = tBean.findById(idTaxonomia);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (found != null) {</span>
+<span class="nc" id="L70">                return Response.status(Response.Status.OK)</span>
+<span class="nc" id="L71">                        .entity(found)</span>
+<span class="nc" id="L72">                        .build();</span>
+            }
+<span class="nc" id="L74">            return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L75">                    .header(&quot;not-found&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L76">                    .build();</span>
+        }
+<span class="nc" id="L78">        return Response.status(422)</span>
+<span class="nc" id="L79">                .header(&quot;missing-parameter&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L80">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractDataAccess.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.control</a> &gt; <span class="el_source">AbstractDataAccess.java</span></div><h1>AbstractDataAccess.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.control;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author alexo
+ */
+public abstract class AbstractDataAccess&lt;T&gt; implements Serializable {
+
+    final Class&lt;T&gt; tipoDato;
+
+<span class="nc" id="L28">    public AbstractDataAccess(Class tipoDato) {</span>
+<span class="nc" id="L29">        this.tipoDato = tipoDato;</span>
+<span class="nc" id="L30">    }</span>
+
+    public abstract EntityManager getEntityManager();
+
+    public void create(T registro) throws IllegalArgumentException, IllegalStateException {
+
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (registro != null) {</span>
+            try {
+<span class="nc" id="L38">                EntityManager em = getEntityManager();</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">                if (em != null) {</span>
+<span class="nc" id="L40">                    em.persist(registro);</span>
+<span class="nc" id="L41">                    return;</span>
+                }
+
+<span class="nc" id="L44">            } catch (Exception ex) {</span>
+<span class="nc" id="L45">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+
+<span class="nc" id="L47">            }</span>
+<span class="nc" id="L48">            throw new IllegalStateException();</span>
+        }
+<span class="nc" id="L50">        throw new IllegalArgumentException();</span>
+    }
+
+    public List&lt;T&gt; findRange(int first, int pageSize) throws IllegalStateException {
+
+<span class="nc" id="L55">        EntityManager em = null;</span>
+
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        if (first &gt;= 0 &amp;&amp; pageSize &gt; 0) {</span>
+
+            try {
+<span class="nc" id="L60">                em = getEntityManager();</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                if (em != null) {</span>
+<span class="nc" id="L62">                    CriteriaBuilder cb = em.getCriteriaBuilder();</span>
+<span class="nc" id="L63">                    CriteriaQuery cq = cb.createQuery(tipoDato);</span>
+<span class="nc" id="L64">                    Root&lt;T&gt; raiz = cq.from(tipoDato);</span>
+<span class="nc" id="L65">                    cq.select(raiz);</span>
+<span class="nc" id="L66">                    TypedQuery q = em.createQuery(cq);</span>
+
+<span class="nc" id="L68">                    q.setFirstResult(first);</span>
+<span class="nc" id="L69">                    q.setMaxResults(pageSize);</span>
+<span class="nc" id="L70">                    return q.getResultList();</span>
+
+                }
+
+<span class="nc" id="L74">            } catch (Exception ex) {</span>
+<span class="nc" id="L75">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+
+<span class="nc" id="L77">            }</span>
+<span class="nc" id="L78">            throw new IllegalStateException();</span>
+
+        }
+<span class="nc" id="L81">        return Collections.EMPTY_LIST;</span>
+
+    }
+
+    public T modify(T registro) throws IllegalStateException {
+<span class="nc" id="L86">        EntityManager em = null;</span>
+        try {
+<span class="nc" id="L88">            em = getEntityManager();</span>
+
+<span class="nc" id="L90">        } catch (Exception ex) {</span>
+<span class="nc" id="L91">            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L92">        }</span>
+
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (registro != null) {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (em != null) {</span>
+                try {
+<span class="nc" id="L97">                    return em.merge(registro);</span>
+<span class="nc" id="L98">                } catch (Exception ex) {</span>
+<span class="nc" id="L99">                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+                }
+            }
+<span class="nc" id="L102">            throw new IllegalStateException();</span>
+        }
+
+<span class="nc" id="L105">        return null;</span>
+
+    }
+
+    public void delete(T registro) throws IllegalStateException, IllegalArgumentException {
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (registro != null) {</span>
+<span class="nc" id="L112">            EntityManager em = null;</span>
+            try {
+<span class="nc" id="L114">                em = getEntityManager();</span>
+<span class="nc" id="L115">            } catch (Exception ex) {</span>
+<span class="nc" id="L116">                Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L117">            }</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (em != null) {</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">                if (!em.contains(registro)) {</span>
+<span class="nc" id="L120">                    registro = em.merge(registro);</span>
+                }
+<span class="nc" id="L122">                em.remove(registro);</span>
+<span class="nc" id="L123">                return;</span>
+            } else {
+<span class="nc" id="L125">                throw new IllegalStateException();</span>
+            }
+        }
+<span class="nc" id="L128">        throw new IllegalArgumentException();</span>
+
+    }
+
+    public T findById(Object id) throws IllegalStateException, IllegalArgumentException {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (id != null) {</span>
+            try {
+<span class="nc" id="L135">                EntityManager em = getEntityManager();</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                if (em != null) {</span>
+<span class="nc" id="L137">                    return (T) em.find(tipoDato, id);</span>
+                } else {
+<span class="nc" id="L139">                    throw new IllegalStateException(&quot;El EntityManager es nulo&quot;);</span>
+                }
+<span class="nc" id="L141">            } catch (Exception ex) {</span>
+<span class="nc" id="L142">                throw new IllegalStateException(&quot;Error al buscar el registro con el ID proporcionado: &quot; + id, ex);</span>
+            }
+        } else {
+<span class="nc" id="L145">            throw new IllegalArgumentException(&quot;El ID proporcionado no puede ser nulo&quot;);</span>
+        }
+    }
+
+    public Long count() throws IllegalStateException {
+<span class="nc" id="L150">        EntityManager em = null;</span>
+        try {
+<span class="nc" id="L152">            em = getEntityManager();</span>
+<span class="nc" id="L153">        } catch (Exception ex) {</span>
+<span class="nc" id="L154">            Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L155">        }</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (em != null) {</span>
+<span class="nc" id="L157">            CriteriaBuilder cb = em.getCriteriaBuilder();</span>
+<span class="nc" id="L158">            CriteriaQuery&lt;Long&gt; cq = cb.createQuery(Long.class);</span>
+
+<span class="nc" id="L160">            cq.select(cb.count(cq.from(tipoDato)));</span>
+
+<span class="nc" id="L162">            return em.createQuery(cq).getSingleResult();</span>
+        }
+<span class="nc" id="L164">        throw new IllegalStateException();</span>
+
+    }
+
+    public Query generarConsultaBase(EntityManager em) {
+<span class="nc" id="L169">        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();</span>
+<span class="nc" id="L170">        cq.select(cq.from(tipoDato));</span>
+<span class="nc" id="L171">        Query q = em.createQuery(cq);</span>
+<span class="nc" id="L172">        return q;</span>
+    }
+
+    public List&lt;T&gt; findAll() throws IllegalStateException {
+<span class="nc" id="L176">        EntityManager em = null;</span>
+        try {
+<span class="nc" id="L178">            em = this.getEntityManager();</span>
+<span class="nc" id="L179">        } catch (Exception e) {</span>
+<span class="nc" id="L180">            throw new IllegalStateException();</span>
+<span class="nc" id="L181">        }</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        if (em != null) {</span>
+<span class="nc" id="L183">            Query q = generarConsultaBase(em);</span>
+<span class="nc" id="L184">            return q.getResultList();</span>
+        } else {
+<span class="nc" id="L186">            return new ArrayList&lt;&gt;();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

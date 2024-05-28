@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoDocumento.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.entity</a> &gt; <span class="el_source">TipoDocumento.java</span></div><h1>TipoDocumento.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.entity;
+
+import jakarta.json.bind.annotation.JsonbTransient;
+import java.io.Serializable;
+import java.util.List;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+/**
+ *
+ * @author alexo
+ */
+@Entity
+@Table(name = &quot;tipo_documento&quot;, catalog = &quot;documentostpi135&quot;, schema = &quot;public&quot;)
+@NamedQueries({
+    @NamedQuery(name = &quot;TipoDocumento.findAll&quot;, query = &quot;SELECT t FROM TipoDocumento t&quot;),
+    @NamedQuery(name = &quot;TipoDocumento.findByIdTipoDocumento&quot;, query = &quot;SELECT t FROM TipoDocumento t WHERE t.idTipoDocumento = :idTipoDocumento&quot;),
+    @NamedQuery(name = &quot;TipoDocumento.findByNombre&quot;, query = &quot;SELECT t FROM TipoDocumento t WHERE t.nombre = :nombre&quot;),
+    @NamedQuery(name = &quot;TipoDocumento.findByActivo&quot;, query = &quot;SELECT t FROM TipoDocumento t WHERE t.activo = :activo&quot;),
+    @NamedQuery(name = &quot;TipoDocumento.findByObservaciones&quot;, query = &quot;SELECT t FROM TipoDocumento t WHERE t.observaciones = :observaciones&quot;)})
+public class TipoDocumento implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = &quot;id_tipo_documento&quot;, nullable = false)
+    private Integer idTipoDocumento;
+    @Column(name = &quot;nombre&quot;, length = 2147483647)
+    private String nombre;
+    @Column(name = &quot;activo&quot;)
+    private Boolean activo;
+    @Column(name = &quot;observaciones&quot;, length = 2147483647)
+    private String observaciones;
+    @OneToMany(mappedBy = &quot;idTipoDocumento&quot;)
+    private List&lt;Atributo&gt; atributoList;
+    @OneToMany(mappedBy = &quot;idTipoDocumento&quot;)
+    private List&lt;Taxonomia&gt; taxonomiaList;
+
+<span class="nc" id="L52">    public TipoDocumento() {</span>
+<span class="nc" id="L53">    }</span>
+
+<span class="nc" id="L55">    public TipoDocumento(Integer idTipoDocumento) {</span>
+<span class="nc" id="L56">        this.idTipoDocumento = idTipoDocumento;</span>
+<span class="nc" id="L57">    }</span>
+
+    public Integer getIdTipoDocumento() {
+<span class="nc" id="L60">        return idTipoDocumento;</span>
+    }
+
+    public void setIdTipoDocumento(Integer idTipoDocumento) {
+<span class="nc" id="L64">        this.idTipoDocumento = idTipoDocumento;</span>
+<span class="nc" id="L65">    }</span>
+
+    public String getNombre() {
+<span class="nc" id="L68">        return nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+<span class="nc" id="L72">        this.nombre = nombre;</span>
+<span class="nc" id="L73">    }</span>
+
+    public Boolean getActivo() {
+<span class="nc" id="L76">        return activo;</span>
+    }
+
+    public void setActivo(Boolean activo) {
+<span class="nc" id="L80">        this.activo = activo;</span>
+<span class="nc" id="L81">    }</span>
+
+    public String getObservaciones() {
+<span class="nc" id="L84">        return observaciones;</span>
+    }
+
+    public void setObservaciones(String observaciones) {
+<span class="nc" id="L88">        this.observaciones = observaciones;</span>
+<span class="nc" id="L89">    }</span>
+
+    @JsonbTransient
+    public List&lt;Atributo&gt; getAtributoList() {
+<span class="nc" id="L93">        return atributoList;</span>
+    }
+
+    public void setAtributoList(List&lt;Atributo&gt; atributoList) {
+<span class="nc" id="L97">        this.atributoList = atributoList;</span>
+<span class="nc" id="L98">    }</span>
+
+    @JsonbTransient
+    public List&lt;Taxonomia&gt; getTaxonomiaList() {
+<span class="nc" id="L102">        return taxonomiaList;</span>
+    }
+
+    public void setTaxonomiaList(List&lt;Taxonomia&gt; taxonomiaList) {
+<span class="nc" id="L106">        this.taxonomiaList = taxonomiaList;</span>
+<span class="nc" id="L107">    }</span>
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L111">        int hash = 0;</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        hash += (idTipoDocumento != null ? idTipoDocumento.hashCode() : 0);</span>
+<span class="nc" id="L113">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (!(object instanceof TipoDocumento)) {</span>
+<span class="nc" id="L120">            return false;</span>
+        }
+<span class="nc" id="L122">        TipoDocumento other = (TipoDocumento) object;</span>
+<span class="nc bnc" id="L123" title="All 8 branches missed.">        if ((this.idTipoDocumento == null &amp;&amp; other.idTipoDocumento != null) || (this.idTipoDocumento != null &amp;&amp; !this.idTipoDocumento.equals(other.idTipoDocumento))) {</span>
+<span class="nc" id="L124">            return false;</span>
+        }
+<span class="nc" id="L126">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L131">        return &quot;sv.edu.ues.occ.ingenieria.tpi135.mapeodocumentos.entity.TipoDocumento[ idTipoDocumento=&quot; + idTipoDocumento + &quot; ]&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

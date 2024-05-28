@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoAtributoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Documientos-1.0-SNAPSHOT</a> &gt; <a href="index.source.html" class="el_package">sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest</a> &gt; <span class="el_source">TipoAtributoResource.java</span></div><h1>TipoAtributoResource.java</h1><pre class="source lang-java linenums">/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sv.edu.ues.occ.ingenieria.tpi135.documientos.boundary.rest;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.control.TipoAtributoBean;
+import sv.edu.ues.occ.ingenieria.tpi135.documientos.entity.TipoAtributo;
+
+/**
+ *
+ * @author alexo
+ */
+@Path(&quot;tipoatributo&quot;)
+<span class="nc" id="L31">public class TipoAtributoResource {</span>
+
+    @Inject
+    TipoAtributoBean taBean;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createTipoAtributo(TipoAtributo nuevo) {
+<span class="nc bnc" id="L39" title="All 4 branches missed.">        if (nuevo == null || nuevo.getIdTipoAtributo() != null) {</span>
+            // Payload nulo o incorrecto
+<span class="nc" id="L41">            return Response.status(RestResourceHeaderPattern.STATUS_PARAMETRO_EQUIVOCADO)</span>
+<span class="nc" id="L42">                    .header(RestResourceHeaderPattern.DETALLE_PARAMETRO_EQUIVOCADO, &quot;Payload nulo o incorrecto&quot;)</span>
+<span class="nc" id="L43">                    .build();</span>
+        }
+
+        // Realizar otras validaciones necesarias
+        // Crear el tipo de atributo
+<span class="nc" id="L48">        taBean.create(nuevo);</span>
+
+        // Retornar la respuesta exitosa con el código 201 y la ubicación del nuevo recurso creado
+<span class="nc" id="L51">        return Response.status(Response.Status.CREATED)</span>
+<span class="nc" id="L52">                .header(&quot;Location&quot;, &quot;tipoatributo/&quot; + nuevo.getIdTipoAtributo())</span>
+<span class="nc" id="L53">                .build();</span>
+    }
+
+   @GET
+    public Response findRange(
+            @QueryParam(&quot;first&quot;) @DefaultValue(&quot;0&quot;) int first,
+            @QueryParam(&quot;pagesize&quot;) @DefaultValue(&quot;50&quot;) int pageSize) {
+
+        try {
+<span class="nc bnc" id="L62" title="All 4 branches missed.">            if (first &lt; 0 || pageSize &lt;= 0) {</span>
+<span class="nc" id="L63">                throw new IllegalArgumentException(&quot;Parámetros de consulta inválidos&quot;);</span>
+            }
+
+<span class="nc" id="L66">            List&lt;TipoAtributo&gt; result = taBean.findRange(first, pageSize);</span>
+<span class="nc" id="L67">            Long total = taBean.count();</span>
+<span class="nc" id="L68">            return Response.ok(result)</span>
+<span class="nc" id="L69">                    .header(&quot;Total-Registros&quot;, total)</span>
+<span class="nc" id="L70">                    .build();</span>
+<span class="nc" id="L71">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L72">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L73">                    .entity(&quot;Error en los parámetros de consulta: &quot; + e.getMessage())</span>
+<span class="nc" id="L74">                    .build();</span>
+<span class="nc" id="L75">        } catch (Exception e) {</span>
+<span class="nc" id="L76">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L77">                    .entity(&quot;Error interno del servidor: &quot; + e.getMessage())</span>
+<span class="nc" id="L78">                    .build();</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;/{id}&quot;)
+    public Response findById(@PathParam(&quot;id&quot;) final Integer idTipoAtributo) {
+        try {
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            if (idTipoAtributo == null) {</span>
+<span class="nc" id="L87">                throw new IllegalArgumentException(&quot;ID de documento no especificado&quot;);</span>
+            }
+
+<span class="nc" id="L90">            TipoAtributo found = taBean.findById(idTipoAtributo);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            if (found != null) {</span>
+<span class="nc" id="L92">                return Response.ok(found).build();</span>
+            } else {
+<span class="nc" id="L94">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L95">                        .entity(&quot;No se encontró el documento con ID: &quot; + idTipoAtributo)</span>
+<span class="nc" id="L96">                        .build();</span>
+            }
+<span class="nc" id="L98">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L99">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L100">                    .entity(&quot;Error en los parámetros de la solicitud: &quot; + e.getMessage())</span>
+<span class="nc" id="L101">                    .build();</span>
+<span class="nc" id="L102">        } catch (Exception e) {</span>
+<span class="nc" id="L103">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L104">                    .entity(&quot;Error interno del servidor: &quot; + e.getMessage())</span>
+<span class="nc" id="L105">                    .build();</span>
+        }
+    }
+    
+    @DELETE
+    @Path(&quot;/{id}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response delete(@PathParam(&quot;id&quot;) Integer idTipoAtributo) {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (idTipoAtributo != null) {</span>
+<span class="nc" id="L114">            TipoAtributo registro = taBean.findById(idTipoAtributo);</span>
+
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (registro != null) {</span>
+                try {
+<span class="nc" id="L118">                    taBean.delete(registro);</span>
+<span class="nc" id="L119">                    return Response.status(Response.Status.NO_CONTENT).build();</span>
+<span class="nc" id="L120">                } catch (Exception ex) {</span>
+<span class="nc" id="L121">                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, ex.getMessage(), ex);</span>
+<span class="nc" id="L122">                    return Response.status(500).header(&quot;delete-exception&quot;, registro.toString()).build();</span>
+                }
+            } else {
+<span class="nc" id="L125">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L126">                        .header(&quot;not-found&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L127">                        .build();</span>
+            }
+        }
+
+<span class="nc" id="L131">        return Response.status(422)</span>
+<span class="nc" id="L132">                .header(&quot;missing-parameter&quot;, &quot;id&quot;)</span>
+<span class="nc" id="L133">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
